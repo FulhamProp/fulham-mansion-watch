@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Golden Streets of Fulham — SW6 Terrace Rankings & Mansion Tax Watch</title>
+<meta name="description" content="Every SW6 terraced street ranked by average sold price, live from HM Land Registry. See which streets are flagged for the £2m mansion tax threshold." />
+<meta property="og:title" content="The Golden Streets of Fulham" />
+<meta property="og:description" content="Every SW6 terraced street ranked by sold price. Find yours — and see if it's flagged for the £2m mansion tax." />
+<meta property="og:image" content="https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1200&q=80&auto=format&fit=crop" />
+<meta property="og:type" content="website" />
+<style>
+  :root {
+    --bg: #110f0d;
+    --bg-card: #1a1714;
+    --bg-card-2: #211d19;
+    --gold: #c8a86a;
+    --gold-bright: #e9cb8e;
+    --cream: #f4eee2;
+    --muted: #9a9286;
+    --line: #2b2620;
+    --red: #c0584a;
+    --amber: #cc9650;
+    --green: #7a9874;
+    --sans: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+    --serif: 'Iowan Old Style', 'Georgia', serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--cream);
+    font-family: var(--serif);
+    line-height: 1.55;
+  }
+  a { color: inherit; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background:
+      linear-gradient(180deg, rgba(17,15,13,0.35) 0%, rgba(17,15,13,0.55) 55%, rgba(17,15,13,0.97) 100%),
+      url('https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=1800&q=80&auto=format&fit=crop') center/cover no-repeat;
+    padding: 28px 24px 48px;
+  }
+  .hero-nav {
+    position: absolute;
+    top: 24px; left: 24px; right: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 0.05em;
+  }
+  .hero-nav .brand { color: var(--gold-bright); font-weight: 600; }
+  .hero-nav .agent { color: var(--cream); text-decoration: none; opacity: 0.85; }
+  .hero-content { max-width: 720px; margin: 0 auto; width: 100%; text-align: center; }
+  .eyebrow {
+    font-family: var(--sans);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: var(--gold);
+    margin-bottom: 18px;
+  }
+  h1 {
+    font-size: clamp(34px, 7vw, 58px);
+    font-weight: 400;
+    margin: 0 0 18px;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+  }
+  h1 em { color: var(--gold-bright); font-style: italic; }
+  .hero p.sub {
+    color: rgba(244,238,226,0.78);
+    font-size: clamp(15px, 2vw, 18px);
+    max-width: 480px;
+    margin: 0 auto 32px;
+  }
+
+  /* ---------- SEARCH ---------- */
+  .street-search {
+    position: relative;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .street-search input {
+    width: 100%;
+    padding: 16px 50px 16px 20px;
+    font-family: var(--sans);
+    font-size: 16px;
+    background: rgba(244,238,226,0.07);
+    border: 1px solid rgba(244,238,226,0.25);
+    border-radius: 50px;
+    color: var(--cream);
+    backdrop-filter: blur(6px);
+    outline: none;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .street-search input::placeholder { color: rgba(244,238,226,0.5); }
+  .street-search input:focus { border-color: var(--gold); background: rgba(244,238,226,0.12); }
+  .street-search .icon {
+    position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+    color: var(--gold); font-size: 16px; pointer-events: none;
+  }
+  .search-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0; right: 0;
+    background: var(--bg-card-2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: left;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    display: none;
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 20;
+  }
+  .search-results.show { display: block; }
+  .search-results .row {
+    padding: 12px 18px;
+    font-family: var(--sans);
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+  }
+  .search-results .row:last-child { border-bottom: none; }
+  .search-results .row:hover { background: rgba(200,168,106,0.08); }
+  .search-results .row .price { color: var(--gold-bright); font-variant-numeric: tabular-nums; }
+  .search-results .row .flag { font-size: 11px; padding: 2px 7px; border-radius: 3px; margin-left: 8px; }
+  .flag.over { background: rgba(192,88,74,0.2); color: var(--red); }
+  .flag.approaching { background: rgba(204,150,80,0.2); color: var(--amber); }
+  .search-empty { padding: 16px 18px; font-family: var(--sans); font-size: 13px; color: var(--muted); }
+
+  .scroll-cue {
+    text-align: center;
+    margin-top: 28px;
+    font-family: var(--sans);
+    font-size: 12px;
+    color: rgba(244,238,226,0.5);
+    letter-spacing: 0.08em;
+  }
+  .trust-line {
+    text-align: center; margin-top: 14px; font-family: var(--sans);
+    font-size: 12px; color: rgba(244,238,226,0.45); letter-spacing: 0.02em;
+  }
+  .street-search input:disabled { opacity: 0.5; cursor: wait; }
+
+  /* ---------- PODIUM ---------- */
+  .podium-section { max-width: 880px; margin: 0 auto; padding: 80px 24px 40px; }
+  .section-head { text-align: center; margin-bottom: 44px; }
+  .section-head .eyebrow { margin-bottom: 12px; }
+  .section-head h2 { font-size: clamp(24px, 4vw, 32px); font-weight: 400; margin: 0; }
+  .section-head p { color: var(--muted); font-size: 15px; margin: 12px auto 0; max-width: 460px; font-family: var(--sans); }
+
+  .podium {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    align-items: end;
+  }
+  .podium-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px 16px;
+    text-align: center;
+    position: relative;
+  }
+  .podium-card.rank-1 { padding-top: 36px; border-color: var(--gold); order: 2; }
+  .podium-card.rank-2 { order: 1; }
+  .podium-card.rank-3 { order: 3; }
+  .medal {
+    font-family: var(--sans); font-size: 13px; letter-spacing: 0.1em;
+    color: var(--gold); margin-bottom: 12px; font-weight: 600;
+  }
+  .podium-card.rank-1 .medal { color: var(--gold-bright); font-size: 14px; }
+  .podium-card .name { font-size: 17px; margin-bottom: 6px; }
+  .podium-card .price { font-family: var(--sans); font-size: 20px; color: var(--gold-bright); font-weight: 600; }
+  .podium-card .meta { font-family: var(--sans); font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  @media (max-width: 600px) {
+    .podium { grid-template-columns: 1fr; }
+    .podium-card.rank-1, .podium-card.rank-2, .podium-card.rank-3 { order: initial; padding-top: 24px; }
+  }
+
+  /* ---------- FULL TABLE ---------- */
+  main.table-section { max-width: 880px; margin: 0 auto; padding: 20px 24px 0; }
+  .status-bar {
+    font-family: var(--sans); font-size: 13px; color: var(--muted);
+    text-align: center; margin: 8px 0 20px;
+  }
+  .legend {
+    display: flex; gap: 18px; justify-content: center; flex-wrap: wrap;
+    font-family: var(--sans); font-size: 12px; color: var(--muted); margin-bottom: 28px;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot.over { background: var(--red); } .dot.approaching { background: var(--amber); } .dot.clear { background: var(--green); }
+
+  table { width: 100%; border-collapse: collapse; }
+  thead th {
+    text-align: left; font-family: var(--sans); font-size: 10px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); padding: 10px 10px; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--bg);
+  }
+  thead th.num { text-align: right; }
+  tbody td { padding: 13px 10px; border-bottom: 1px solid var(--line); font-size: 15px; }
+  tbody td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody tr:hover { background: var(--bg-card); }
+  .rank { color: var(--muted); font-size: 13px; width: 26px; font-family: var(--sans); }
+  .sales-meta { font-family: var(--sans); font-size: 11px; color: var(--muted); }
+  .badge { display: inline-block; font-family: var(--sans); font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; margin-left: 6px; }
+  .badge.over { background: rgba(192,88,74,0.18); color: var(--red); border: 1px solid rgba(192,88,74,0.4); }
+  .badge.approaching { background: rgba(204,150,80,0.18); color: var(--amber); border: 1px solid rgba(204,150,80,0.4); }
+  .avg-price.over { color: var(--red); } .avg-price.approaching { color: var(--amber); }
+
+  .skeleton-row td { padding: 13px 10px; border-bottom: 1px solid var(--line); }
+  .skeleton-bar { height: 14px; border-radius: 4px; background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-2) 50%, var(--bg-card) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+  @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  .error { text-align: center; padding: 50px 20px; color: var(--muted); font-family: var(--sans); font-size: 14px; }
+
+  /* ---------- MANSION TAX EXPLAINER ---------- */
+  .explainer {
+    max-width: 720px; margin: 60px auto 0; padding: 0 24px;
+    text-align: center;
+  }
+  .explainer h2 { font-size: clamp(22px, 4vw, 28px); font-weight: 400; }
+  .explainer p { color: var(--muted); font-family: var(--sans); font-size: 14.5px; max-width: 540px; margin: 14px auto 0; }
+  .threshold-bar {
+    margin: 32px auto 0; max-width: 540px;
+    height: 10px; border-radius: 6px; overflow: hidden;
+    background: var(--bg-card); display: flex; font-family: var(--sans); font-size: 10px;
+  }
+  .threshold-bar .clear { background: var(--green); flex: 9; }
+  .threshold-bar .approaching { background: var(--amber); flex: 1; }
+  .threshold-bar .over { background: var(--red); flex: 0; }
+  .threshold-labels { display: flex; justify-content: space-between; max-width: 540px; margin: 8px auto 0; font-family: var(--sans); font-size: 11px; color: var(--muted); }
+
+  /* ---------- RETENTION / EMAIL CAPTURE ---------- */
+  .retention {
+    max-width: 600px; margin: 64px auto 0; padding: 32px 28px;
+    background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px;
+    text-align: center;
+  }
+  .retention h3 { font-size: 19px; font-weight: 400; margin: 0 0 8px; }
+  .retention p { font-family: var(--sans); font-size: 13.5px; color: var(--muted); margin: 0 0 22px; }
+  .intent-toggle {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 18px; font-family: var(--sans); font-size: 13px;
+  }
+  .intent-toggle label {
+    display: flex; align-items: center; gap: 6px; padding: 8px 14px;
+    border: 1px solid var(--line); border-radius: 30px; cursor: pointer; color: var(--muted);
+  }
+  .intent-toggle input { accent-color: var(--gold); }
+  .form-row { display: flex; gap: 8px; max-width: 380px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+  .form-row input[type=email] {
+    flex: 1; min-width: 200px; padding: 12px 16px; border-radius: 8px;
+    border: 1px solid var(--line); background: var(--bg); color: var(--cream); font-family: var(--sans); font-size: 14px; outline: none;
+  }
+  .form-row input[type=email]:focus { border-color: var(--gold); }
+  .form-row button {
+    padding: 12px 20px; border-radius: 8px; border: none; background: var(--gold);
+    color: var(--bg); font-family: var(--sans); font-weight: 600; font-size: 14px; cursor: pointer;
+  }
+  .form-row button:hover { background: var(--gold-bright); }
+  .retention .success { color: var(--green); font-family: var(--sans); font-size: 13.5px; margin-top: 14px; display: none; }
+  .retention .success.error-msg { color: var(--red); }
+
+  /* ---------- FINAL CTA ---------- */
+  .final-cta {
+    max-width: 720px; margin: 64px auto 0; padding: 0 24px 90px;
+    text-align: center;
+  }
+  .final-cta h2 { font-size: clamp(24px, 4vw, 32px); font-weight: 400; }
+  .final-cta p { color: var(--muted); font-family: var(--sans); font-size: 14.5px; margin: 12px auto 26px; max-width: 460px; }
+  .final-cta a.button {
+    display: inline-block; background: var(--gold); color: var(--bg);
+    font-family: var(--sans); font-size: 14px; font-weight: 600; text-decoration: none;
+    padding: 14px 30px; border-radius: 50px;
+  }
+  .final-cta a.button:hover { background: var(--gold-bright); }
+
+  footer {
+    border-top: 1px solid var(--line); padding: 28px 24px 50px; max-width: 880px; margin: 0 auto;
+    font-family: var(--sans); font-size: 12px; color: var(--muted); text-align: center;
+  }
+  footer a { color: var(--gold); text-decoration: none; }
+
+  @media (max-width: 600px) {
+    .sales-meta { display: none; }
+    thead th:nth-child(4) { display: none; }
+    tbody td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-nav">
+    <span class="brand">LIVE IN FULHAM</span>
+    <a class="agent" href="https://www.linkedin.com/in/lewin-c-62154b53">Lewin · Knight Frank ↗</a>
+  </div>
+  <div class="hero-content">
+    <div class="eyebrow">SW6 · Terraced Houses · Live Land Registry Data</div>
+    <h1>The golden streets<br/>of <em>Fulham</em>, ranked.</h1>
+    <p class="sub">Every terraced street in SW6, ordered by what's actually sold in the last 12 months — and flagged if it's nearing the £2m mansion tax line.</p>
+
+    <div class="street-search">
+      <input type="text" id="heroSearch" placeholder="Loading streets…" autocomplete="off" disabled />
+      <span class="icon">⌕</span>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    <div class="trust-line">Live HM Land Registry data, updated daily — not a stale portal average.</div>
+    <div class="scroll-cue">↓ See the full ranking</div>
+  </div>
+</section>
+
+<section class="podium-section" id="podium-section">
+  <div class="section-head">
+    <div class="eyebrow">Top Of The Table</div>
+    <h2>The three priciest streets right now</h2>
+  </div>
+  <div class="podium" id="podium">
+    <div class="podium-card rank-2"><div class="skeleton-bar" style="width:60%;margin:0 auto;"></div></div>
+    <div class="podium-card rank-1"><div class="skeleton-bar" style="width:60%;margin:0 auto;"></div></div>
+    <div class="podium-card rank-3"><div class="skeleton-bar" style="width:60%;margin:0 auto;"></div></div>
+  </div>
+</section>
+
+<main class="table-section">
+  <div class="section-head" style="margin-top:40px;">
+    <div class="eyebrow">Full Ranking</div>
+    <h2>Every SW6 terraced street</h2>
+  </div>
+  <div class="legend">
+    <span><i class="dot over"></i> Over £2m avg</span>
+    <span><i class="dot approaching"></i> Within 10% of £2m</span>
+    <span><i class="dot clear"></i> Clear of threshold</span>
+  </div>
+  <div class="status-bar" id="statusBar"></div>
+  <table>
+    <thead>
+      <tr>
+        <th class="rank">#</th>
+        <th>Street</th>
+        <th class="num">Avg sold</th>
+        <th class="num">Sales</th>
+        <th class="num">vs £2m</th>
+      </tr>
+    </thead>
+    <tbody id="streetBody">
+      <tr class="skeleton-row"><td colspan="5"><div class="skeleton-bar"></div></td></tr>
+      <tr class="skeleton-row"><td colspan="5"><div class="skeleton-bar"></div></td></tr>
+      <tr class="skeleton-row"><td colspan="5"><div class="skeleton-bar"></div></td></tr>
+      <tr class="skeleton-row"><td colspan="5"><div class="skeleton-bar"></div></td></tr>
+      <tr class="skeleton-row"><td colspan="5"><div class="skeleton-bar"></div></td></tr>
+    </tbody>
+  </table>
+</main>
+
+<section class="explainer">
+  <div class="eyebrow">Why It Matters</div>
+  <h2>What is the £2m mansion tax?</h2>
+  <p>From April 2028, homes valued at £2m+ face a new High Value Council Tax Surcharge — starting around £2,500/year and rising with value. Hammersmith &amp; Fulham is named as one of the boroughs most exposed. If your street's average is in the amber or red zone above, it's worth understanding whether your specific home could be assessed — and whether timing a sale matters.</p>
+  <div class="threshold-bar"><div class="clear"></div><div class="approaching"></div></div>
+  <div class="threshold-labels"><span>£0</span><span>£1.8m</span><span>£2m+</span></div>
+</section>
+
+<div class="retention">
+  <h3>Stay ahead of it</h3>
+  <p>As prices move and the VOA valuation process unfolds, streets will shift between bands. Tell me what you need — I'll only be in touch when it actually matters.</p>
+  <form id="notifyForm">
+    <div class="intent-toggle">
+      <label><input type="radio" name="intent" value="watching" checked /> Just keep me updated</label>
+      <label><input type="radio" name="intent" value="selling" /> I'm thinking about timing a sale</label>
+    </div>
+    <div class="form-row">
+      <input type="email" id="notifyEmail" placeholder="you@email.com" required />
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+  <div class="success" id="notifySuccess"></div>
+</div>
+
+<footer>
+  Data: HM Land Registry Price Paid Data, Open Government Licence v3.0. Averages cover registered terraced-house sales only. Streets with very few sales (1–2) can be skewed by a single transaction — treat as directional, not a valuation. Not financial or tax advice.
+  <br /><br />
+  Built by <a href="https://www.linkedin.com/in/lewin-c-62154b53">Lewin Craig-Corbett</a>, Knight Frank Fulham — a local agent, not a national portal.
+</footer>
+
+<script>
+let STREET_DATA = [];
+
+async function load() {
+  const statusBar = document.getElementById('statusBar');
+  const tbody = document.getElementById('streetBody');
+  const podium = document.getElementById('podium');
+
+  try {
+    const res = await fetch('/api/streets');
+    if (!res.ok) throw new Error('Server returned ' + res.status);
+    const data = await res.json();
+
+    if (!data.streets || data.streets.length === 0) {
+      statusBar.textContent = 'No terraced house sales found for SW6 in the last 12 months.';
+      tbody.innerHTML = '';
+      return;
+    }
+
+    STREET_DATA = data.streets;
+    renderTable(STREET_DATA);
+    renderPodium(STREET_DATA);
+    heroSearch.disabled = false;
+    heroSearch.placeholder = 'Find your street…';
+
+    const generated = new Date(data.generatedAt);
+    statusBar.textContent = `${data.streets.length} streets · ${data.streets.reduce((a,s)=>a+s.count,0)} sales · updated ${generated.toLocaleDateString('en-GB')}`;
+  } catch (err) {
+    statusBar.textContent = '';
+    tbody.innerHTML = `<tr><td colspan="5" class="error">Couldn't load live data right now (${err.message}). The Land Registry endpoint can be slow on first request — try refreshing in a few seconds.</td></tr>`;
+    podium.innerHTML = '';
+  }
+}
+
+function statusClass(s) {
+  return s.mansionTaxStatus === 'over' ? 'over' : s.mansionTaxStatus === 'approaching' ? 'approaching' : '';
+}
+function badge(s) {
+  if (s.mansionTaxStatus === 'over') return '<span class="badge over">Over £2m</span>';
+  if (s.mansionTaxStatus === 'approaching') return '<span class="badge approaching">Approaching</span>';
+  return '';
+}
+
+function renderTable(streets) {
+  const tbody = document.getElementById('streetBody');
+  tbody.innerHTML = streets.map((s, i) => `
+    <tr>
+      <td class="rank">${i + 1}</td>
+      <td>${s.street}${badge(s)}<br/><span class="sales-meta">${s.count} sale${s.count !== 1 ? 's' : ''} · median £${s.medianPrice.toLocaleString()}</span></td>
+      <td class="num"><span class="avg-price ${statusClass(s)}">£${s.avgPrice.toLocaleString()}</span></td>
+      <td class="num sales-meta">${s.count}</td>
+      <td class="num sales-meta">${s.pctOfThreshold}%</td>
+    </tr>
+  `).join('');
+}
+
+function renderPodium(streets) {
+  const top3 = streets.slice(0, 3);
+  const podium = document.getElementById('podium');
+  const labels = ['NO. 1', 'NO. 2', 'NO. 3'];
+  const ranks = ['rank-1', 'rank-2', 'rank-3'];
+  podium.innerHTML = top3.map((s, i) => `
+    <div class="podium-card ${ranks[i]}">
+      <div class="medal">${labels[i]}</div>
+      <div class="name">${s.street}</div>
+      <div class="price">£${s.avgPrice.toLocaleString()}</div>
+      <div class="meta">${s.count} sale${s.count !== 1 ? 's' : ''} in 12mo</div>
+    </div>
+  `).join('');
+}
+
+const heroSearch = document.getElementById('heroSearch');
+const searchResults = document.getElementById('searchResults');
+
+heroSearch.addEventListener('input', () => {
+  const q = heroSearch.value.trim().toLowerCase();
+  if (!q) { searchResults.classList.remove('show'); return; }
+  const matches = STREET_DATA.filter(s => s.street.toLowerCase().includes(q)).slice(0, 8);
+
+  if (matches.length === 0) {
+    searchResults.innerHTML = `<div class="search-empty">No street matched "${heroSearch.value}" — try a shorter fragment.</div>`;
+  } else {
+    searchResults.innerHTML = matches.map(s => `
+      <div class="row" data-street="${s.street}">
+        <span>${s.street}${badge(s)}</span>
+        <span class="price">£${s.avgPrice.toLocaleString()}</span>
+      </div>
+    `).join('');
+  }
+  searchResults.classList.add('show');
+});
+
+searchResults.addEventListener('click', (e) => {
+  const row = e.target.closest('.row');
+  if (!row) return;
+  document.getElementById('podium-section').scrollIntoView({ behavior: 'smooth' });
+  searchResults.classList.remove('show');
+});
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.street-search')) searchResults.classList.remove('show');
+});
+
+document.getElementById('notifyForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('notifyEmail').value;
+  const intent = document.querySelector('input[name=intent]:checked').value;
+  const successEl = document.getElementById('notifySuccess');
+  const submitBtn = e.target.querySelector('button');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Submitting…';
+
+  try {
+    const res = await fetch('/api/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, intent }),
+    });
+    if (!res.ok) throw new Error('Server rejected the request');
+
+    successEl.className = 'success';
+    successEl.style.display = 'block';
+    successEl.textContent = intent === 'selling'
+      ? "Done — I'll be in touch directly about timing options."
+      : "Done — I'll only email when something near you actually changes.";
+    e.target.reset();
+  } catch (err) {
+    // Fallback so a lead is never lost outright if the API call fails.
+    successEl.className = 'success error-msg';
+    successEl.style.display = 'block';
+    successEl.textContent = "Couldn't submit automatically — opening email instead.";
+    window.location.href = `mailto:lewin.craig-corbett@knightfrank.com?subject=Mansion%20Watch%20%E2%80%94%20${intent}&body=Please%20add%20${encodeURIComponent(email)}.`;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit';
+  }
+});
+
+load();
+</script>
+
+</body>
+</html>
