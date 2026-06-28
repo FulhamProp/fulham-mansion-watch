@@ -1,0 +1,8 @@
+{
+  "postcode": "SW6",
+  "monthsLookback": 12,
+  "mansionTaxThreshold": 2000000,
+  "generatedAt": "2026-06-28T00:00:00.000Z",
+  "note": "PLACEHOLDER — run scripts/fetch-data.js locally then commit this file",
+  "streets": []
+}
