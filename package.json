@@ -1,7 +1,6 @@
 {
   "name": "fulham-mansion-watch",
   "version": "1.0.0",
-  "description": "SW6 terraced house street rankings (12mo avg) with mansion-tax threshold warnings, sourced live from HM Land Registry Price Paid Data.",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js"
@@ -13,3 +12,4 @@
     "express": "^4.19.2",
     "node-fetch": "^2.7.0"
   }
+}
